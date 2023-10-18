@@ -1,0 +1,207 @@
+﻿<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.all.min.js"></script>
+<div class="full-screen">
+@model IEnumerable<ProductDetails.Models.ProductModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Pager pager = new Pager();
+    int pageNo = 0;
+
+    if(ViewBag.Pager !=null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="CreateOrEdit">Create New</a>
+</p>
+
+<table class="table" border="1">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+                    <a asp-action="Index" asp-route-sortColumn="Code" asp-route-sortDirection="asc">Code</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+                    <a asp-action="Index" asp-route-sortColumn="Name" asp-route-sortDirection="asc">Name</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpiryDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpiryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+          @*  <td>
+                @Html.DisplayFor(modelItem => item.Image)
+            </td>*@
+                <td>
+                    <img src="@Url.Content(item.Image)" style="width:60px;" />
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDate)
+            </td>
+            <td>
+               @* @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                    <div class="btn-group">
+                        <a asp-action="CreateOrEdit" asp-route-id="@item.ProductId" class="btn btn-sm btn-info">Edit</a>
+                        @*<a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-sm btn-info ml-1 ">Details</a>*@
+                        @*<a asp-action="Delete" asp-route-id="@item.ProductId" class="Delete-style btn-sm btn-danger ml-1">Delete</a>*@
+                        <button type="button" class="Delete-style  btn-danger ml-1" data-url="@Url.Action("Delete", new { id = item.ProductId })">Delete</button>
+                    </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+<div class="container">
+    @if(pager.TotalPages > 0)
+    {
+        <ul class="pagination justify-content-end">
+            @if (pager.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="product" asp-action="Index" asp-route-pg="1">First</a>
+                </li>
+                <li>
+                    <a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pg="@(pager.CurrentPage -1)">Previous</a>
+                </li>
+            }
+            @for (var pge = pager.StartPage; pge <= pager.EndPage;pge++)
+            {
+                <li class="page-item" @(pge == pager.CurrentPage ? "active" : "")>
+                    <a class="page-link" asp-controller="Product" asp-action="Index" asp-route-page="@pge" >@pge</a>
+                </li>
+            }
+            @if (pager.CurrentPage < pager.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="product" asp-action="Index" asp-route-pg="@(pager.CurrentPage+1)">Next</a>
+                </li>
+                <li>
+                    <a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pg="@(pager.TotalPages)">last</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+</div>
+
+<style>
+    /* Add your CSS styles here */
+    /* For example, you can style the Delete button */
+
+    .full-screen{
+        display:flex;
+        flex-direction:column;
+        background-color:aquamarine;
+        
+    }
+    .Delete-style {
+        background-color: brown;
+        color: white;
+    }
+
+    .table{
+        
+    }
+
+    .page-link:hover{
+        background-color: red;
+    }
+</style>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var deleteButtons = document.querySelectorAll('.Delete-style');
+
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                var deleteUrl = this.getAttribute('data-url');
+
+                // Use SweetAlert for confirmation
+                Swal.fire({
+                    title: 'Are you sure to delete this product?',
+                    text: 'You will not be able to recover this item!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete  it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to the delete URL
+                        window.location.href = deleteUrl;
+                    }
+                    else {
+                        swal("Your Record is safe!");
+                    }
+                });
+            });
+        });
+    });
+</script>

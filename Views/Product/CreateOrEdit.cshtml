@@ -1,0 +1,148 @@
+﻿<div class="create-container">
+
+
+
+@model ProductDetails.Models.ProductModel
+
+@{
+    ViewData["Title"] = "CreateorEdit";
+}
+
+<h1>Create or Edit</h1>
+
+<h4>ProductModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form  asp-action="Create" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           @* <div class="form-group">
+                <label asp-for="ProductId" class="control-label"></label>
+                <input asp-for="ProductId" class="form-control" />
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpiryDate" class="control-label"></label>
+                <input asp-for="ExpiryDate" class="form-control" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+            </div>
+           @* <div class="form-group">
+                <label asp-for="Category" class="control-label"></label>
+                <input asp-for="Category" class="form-control" />
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="Category" class="control-label"></label>
+                @* <input asp-for="Category" class="form-control" /> *@
+                <select asp-for="Category" class="form-control">
+                    <option value="">select one category from A to E</option>
+                    <option value="Category A"> Category A</option>
+                    <option value="Category B"> Category B</option>
+                    <option value="Category C"> Category C</option>
+                    <option value="Category D"> Category D</option>
+                    <option value="Category D"> Category E</option>
+                    
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+         @*  <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>*@
+
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <div>
+                    @Html.RadioButtonFor(model =>model.Image,"/images/Electronics.png")
+                    <img class="image-1" src="~/images/Electronics.png" style="width:50px;" />
+
+                    @Html.RadioButtonFor(model =>model.Image,"/images/Dress.png")
+                    <img class="image-1" src="~/images/Dress.png" style="width:50px;" />
+
+                    @Html.RadioButtonFor(model =>model.Image,"/images/automobile.png")
+                    <img class="image-1" src="~/images/automobile.png" style="width:50px;" />
+
+                    @Html.RadioButtonFor(model =>model.Image,"/images/shoes.png")
+                    <img class="image-1" src="~/images/shoes.png" style="width:50px;" />
+                </div>
+
+
+
+
+           @* <div class="form-group">
+                <label asp-for="ProductImage" class="control-label"></label>
+                <div class="custom-file">
+                    <input asp-for="ProductImage" class="custom-file-input" id="Image" />
+                    <label class="custom-file-label" for="Image">Choose file</label>
+                </div>
+                
+                <span asp-validation-for="ProductImage" class="text-danger"></span>
+            </div>
+*@
+           <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+             @*   <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>*@
+           
+                @Html.RadioButtonFor(s=>s.Status,"Active") Active
+                @Html.RadioButtonFor(s=>s.Status,"InActive") InActive
+
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationDate" class="control-label"></label>
+                <input asp-for="CreationDate" class="form-control" />
+                <span asp-validation-for="CreationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                    <input type="submit" value="Create" class="btn btn-primary" />
+               
+                    <input type="submit" value="Edit" class="btn btn-primary" />
+                
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@*@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(".custom-file-input").on("change", function()
+        {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom.file-label").addClass("selected").html(fileName);
+        });
+        </script>
+}*@
+</div>
+
+
+
+<style>
+.create-container{
+    background-color:aquamarine;
+}
+
+</style>

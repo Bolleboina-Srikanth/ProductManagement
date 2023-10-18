@@ -1,0 +1,14 @@
+﻿@*@model IPagedList
+
+@{
+    var pager = new PagedListRenderOptions
+            {
+                LiElementClasses = new[] { "page-item" },
+                PageClasses = new[] { "page-link" },
+                UlElementClasses = new[] { "pagination" }
+            };
+}
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }), pager)
+
+*@
